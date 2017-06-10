@@ -84,10 +84,7 @@ func main() {
 	http.HandleFunc("/", handler)
 	http.HandleFunc("/count", counter)
 	http.HandleFunc("/lissajous", func(w http.ResponseWriter, r *http.Request) {
-		if err := r.ParseForm(); err != nil {
-			log.Println(err)
-		}
-		cycles, err := strconv.ParseFloat(r.Form.Get("cycles"), 64)
+		cycles, err := strconv.ParseFloat(r.FormValue("cycles"), 64)
 		if err != nil {
 			cycles = 5
 		}
