@@ -18,10 +18,6 @@ var palette = []color.Color{
 	color.RGBA{0x00, 0x80, 0x00, 0xff}, // green
 }
 
-func main() {
-	lissajous(os.Stdout)
-}
-
 func lissajous(out io.Writer) {
 	const (
 		cycles  = 5
@@ -52,4 +48,8 @@ func lissajous(out io.Writer) {
 		anim.Image = append(anim.Image, img)
 	}
 	gif.EncodeAll(out, &anim)
+}
+
+func main() {
+	lissajous(os.Stdout)
 }
