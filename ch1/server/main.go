@@ -18,7 +18,7 @@ import (
 var mu sync.Mutex
 var count int
 
-func handler(w http.ResponseWriter, r *http.Request) {
+func defaultHandler(w http.ResponseWriter, r *http.Request) {
 	mu.Lock()
 	count++
 	mu.Unlock()
@@ -36,7 +36,7 @@ func handler(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
-func counter(w http.ResponseWriter, r *http.Request) {
+func counterHandler(w http.ResponseWriter, r *http.Request) {
 	mu.Lock()
 	fmt.Fprintf(w, "Count %d\n", count)
 	mu.Unlock()
@@ -79,19 +79,21 @@ func lissajous(size int, cycles int, out io.Writer) {
 	gif.EncodeAll(out, &anim)
 }
 
+func lissajousHandler(w http.ResponseWriter, r *http.Request) {
+	cycles, err := strconv.Atoi(r.FormValue("cycles"))
+	if err != nil {
+		cycles = 5
+	}
+	size, err := strconv.Atoi(r.FormValue("size"))
+	if err != nil {
+		size = 100
+	}
+	lissajous(size, cycles, w)
+}
+
 func main() {
-	http.HandleFunc("/", handler)
-	http.HandleFunc("/count", counter)
-	http.HandleFunc("/lissajous", func(w http.ResponseWriter, r *http.Request) {
-		cycles, err := strconv.Atoi(r.FormValue("cycles"))
-		if err != nil {
-			cycles = 5
-		}
-		size, err := strconv.Atoi(r.FormValue("size"))
-		if err != nil {
-			size = 100
-		}
-		lissajous(size, cycles, w)
-	})
+	http.HandleFunc("/", defaultHandler)
+	http.HandleFunc("/count", counterHandler)
+	http.HandleFunc("/lissajous", lissajousHandler)
 	log.Fatal(http.ListenAndServe("localhost:8000", nil))
 }
