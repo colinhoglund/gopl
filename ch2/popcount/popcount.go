@@ -54,8 +54,9 @@ func ClearPopCount(x uint64) int {
 }
 
 func main() {
-	fmt.Println(PopCount(11111111))
-	fmt.Println(LoopPopCount(11111111))
-	fmt.Println(ShiftPopCount(11111111))
-	fmt.Println(ClearPopCount(11111111))
+	var num uint64 = 1111111
+	fmt.Println(PopCount(num))
+	fmt.Println(LoopPopCount(num))
+	fmt.Println(ShiftPopCount(num))
+	fmt.Println(ClearPopCount(num))
 }
